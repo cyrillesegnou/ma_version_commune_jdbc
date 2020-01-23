@@ -59,8 +59,9 @@ public class ContactDao {
 		String sql = "INSERT INTO personnes civilite, nom, prenom = 1 , 2 , 3 "; 
 		
 		try (Connection connection = DriverManager.getConnection(user, pswd, url);
-				PreparedStatement statement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
+				PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 		    ) {
+			 
 		        statement.setString(1, contact.getCivilite());
 		        statement.setString(2, contact.getNom());
 		        statement.setString(3, contact.getPrenom());
@@ -69,7 +70,9 @@ public class ContactDao {
             if (generatedId.next()) {
                 contact.setId(generatedId.getLong(1));
             }
-            else { }
+            else { 
+            	}
+            }
 		
 	}}
 }
