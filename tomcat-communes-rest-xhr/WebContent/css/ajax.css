@@ -1,0 +1,30 @@
+ul{
+	width: 250px;
+}
+
+li:hover{
+	background-color: yellow;
+}
+
+.form{
+	padding-bottom: 10px;
+}
+
+.left{
+/* 	border: 1px black solid; */
+	width: 300px;
+	float: left;
+}
+
+.right{
+/* 	border: 1px black solid; */
+	width: 700px;
+	height: 500px;
+	position: relative;
+	float: right;
+}
+
+#map{
+	height: 100%
+}
+

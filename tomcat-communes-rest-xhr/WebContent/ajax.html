@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>communes-rest</title>
+<script type="text/javascript" src="js/ajax.js"></script>
+<link rel="stylesheet" href="css/ajax.css">
+</head>
+<body>
+	<div class="form">
+		<input type="text" id="cp"/>
+		<button type="button" id="b1">Requête AJAX</button>
+	</div>
+	<div class="left">
+		<ul id="view"></ul>
+	</div>
+	<div class="right">
+		<div id="map"></div>
+		<div id="weather"></div>
+	</div>
+	<script>
+      var map;
+      function initMap(coordonnees = {lat: -34.397, lng: 150.644}) {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: coordonnees,
+          zoom: 8
+        });
+      }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD_aEzPFrouCpHX71oI-Vifg8ar1YVOz_I&callback=initMap"
+    async defer></script>	
+</body>
+</html>

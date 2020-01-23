@@ -1,0 +1,263 @@
+-p 
+Enter password: 
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 19
+Server version: 5.5.44-MariaDB MariaDB Server
+
+Copyright (c) 2000, 2015, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> us communes-france ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'us communes-france' at line 1
+MariaDB [(none)]> use communes-france ;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+MariaDB [communes-france]> show tables;
++---------------------------+
+| Tables_in_communes-france |
++---------------------------+
+| categories                |
+| cities                    |
+| communes                  |
+| departments               |
+| film_acteur               |
+| films                     |
+| personnes                 |
+| regions                   |
+| resumes                   |
++---------------------------+
+9 rows in set (0.00 sec)
+
+MariaDB [communes-france]> explain cities ;
++-----------------+------------------+------+-----+---------+----------------+
+| Field           | Type             | Null | Key | Default | Extra          |
++-----------------+------------------+------+-----+---------+----------------+
+| id              | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| department_code | varchar(3)       | NO   | MUL | NULL    |                |
+| insee_code      | varchar(5)       | YES  |     | NULL    |                |
+| zip_code        | varchar(5)       | YES  |     | NULL    |                |
+| name            | varchar(255)     | NO   |     | NULL    |                |
+| slug            | varchar(255)     | NO   |     | NULL    |                |
+| gps_lat         | double(16,14)    | NO   |     | NULL    |                |
+| gps_lng         | double(17,14)    | NO   |     | NULL    |                |
++-----------------+------------------+------+-----+---------+----------------+
+8 rows in set (0.00 sec)
+
+MariaDB [communes-france]> explain regions ;
++-------+------------------+------+-----+---------+----------------+
+| Field | Type             | Null | Key | Default | Extra          |
++-------+------------------+------+-----+---------+----------------+
+| id    | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| code  | varchar(3)       | NO   | UNI | NULL    |                |
+| name  | varchar(255)     | NO   |     | NULL    |                |
+| slug  | varchar(255)     | NO   |     | NULL    |                |
++-------+------------------+------+-----+---------+----------------+
+4 rows in set (0.01 sec)
+
+MariaDB [communes-france]> explain departement;
+ERROR 1146 (42S02): Table 'communes-france.departement' doesn't exist
+MariaDB [communes-france]> explain departements;
+ERROR 1146 (42S02): Table 'communes-france.departements' doesn't exist
+MariaDB [communes-france]> explain departments;
++-------------+------------------+------+-----+---------+----------------+
+| Field       | Type             | Null | Key | Default | Extra          |
++-------------+------------------+------+-----+---------+----------------+
+| id          | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| region_code | varchar(3)       | NO   | MUL | NULL    |                |
+| code        | varchar(3)       | NO   | MUL | NULL    |                |
+| name        | varchar(255)     | NO   |     | NULL    |                |
+| slug        | varchar(255)     | NO   |     | NULL    |                |
++-------------+------------------+------+-----+---------+----------------+
+5 rows in set (0.01 sec)
+
+MariaDB [communes-france]> explain communes ;;
++-------------+------------------+------+-----+---------+-------+
+| Field       | Type             | Null | Key | Default | Extra |
++-------------+------------------+------+-----+---------+-------+
+| id          | int(10) unsigned | NO   |     | 0       |       |
+| nom         | varchar(255)     | NO   |     | NULL    |       |
+| code_postal | varchar(5)       | YES  |     | NULL    |       |
+| departement | varchar(255)     | NO   |     | NULL    |       |
+| region      | varchar(255)     | NO   |     | NULL    |       |
+| latitude    | double(16,14)    | NO   |     | NULL    |       |
+| longitude   | double(17,14)    | NO   |     | NULL    |       |
++-------------+------------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+ERROR: No query specified
+
+MariaDB [communes-france]> from cities c, region r, department d where ; 
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'from cities c, region r, department d where' at line 1
+MariaDB [communes-france]> explain cities;
++-----------------+------------------+------+-----+---------+----------------+
+| Field           | Type             | Null | Key | Default | Extra          |
++-----------------+------------------+------+-----+---------+----------------+
+| id              | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| department_code | varchar(3)       | NO   | MUL | NULL    |                |
+| insee_code      | varchar(5)       | YES  |     | NULL    |                |
+| zip_code        | varchar(5)       | YES  |     | NULL    |                |
+| name            | varchar(255)     | NO   |     | NULL    |                |
+| slug            | varchar(255)     | NO   |     | NULL    |                |
+| gps_lat         | double(16,14)    | NO   |     | NULL    |                |
+| gps_lng         | double(17,14)    | NO   |     | NULL    |                |
++-----------------+------------------+------+-----+---------+----------------+
+8 rows in set (0.00 sec)
+
+MariaDB [communes-france]> select c.id, r.id, d.id from cities c, region r, department d where r.id=c.id=d.id  ; 
+ERROR 1146 (42S02): Table 'communes-france.region' doesn't exist
+MariaDB [communes-france]> select c.id, r.id, d.id from cities c, regions r, department d where r.id=c.id=d.id  ; 
+ERROR 1146 (42S02): Table 'communes-france.department' doesn't exist
+MariaDB [communes-france]> select c.id, r.id, d.id from cities c, regions r, departments d where r.id=c.id=d.id  ; 
++----+----+----+
+| id | id | id |
++----+----+----+
+|  1 |  1 |  1 |
+|  2 |  2 |  1 |
+|  3 |  3 |  1 |
+|  4 |  4 |  1 |
+|  5 |  5 |  1 |
+|  6 |  6 |  1 |
+|  7 |  7 |  1 |
+|  8 |  8 |  1 |
+|  9 |  9 |  1 |
+| 10 | 10 |  1 |
+| 11 | 11 |  1 |
+| 12 | 12 |  1 |
+| 13 | 13 |  1 |
+| 14 | 14 |  1 |
+| 15 | 15 |  1 |
+| 16 | 16 |  1 |
+| 17 | 17 |  1 |
+| 18 | 18 |  1 |
+| 19 | 19 |  1 |
++----+----+----+
+19 rows in set (0.06 sec)
+
+MariaDB [communes-france]> select c.id, r.id, d.id from cities c, regions r, departments d where r.id=c.id=d.id group by c.zip_code ; 
++----+----+----+
+| id | id | id |
++----+----+----+
+| 10 | 10 |  1 |
+| 11 | 11 |  1 |
+| 15 | 15 |  1 |
+| 12 | 12 |  1 |
+|  2 |  2 |  1 |
++----+----+----+
+12 rows in set (0.06 sec)
+
+MariaDB [communes-france]> select c.name, r.name, d.name from cities c, regions r, departments d where r.id=c.id=d.id group by c.zip_code ; 
++--------------------------+-----------------------------+------+
+| name                     | name                        | name |
++--------------------------+-----------------------------+------+
+| Apremont                 | Hauts-de-France             | Ain  |
+| Aranc                    | Grand Est                   | Ain  |
+| Arbigny                  | Occitanie                   | Ain  |
+| Arandas                  | Pays de la Loire            | Ain  |
+| Ambléon                  | Mayotte                     | Ain  |
+| Ambérieux-en-Dombes      | La Réunion                  | Ain  |
+| Anglefort                | Normandie                   | Ain  |
+| L'Abergement-Clémenciat  | Guadeloupe                  | Ain  |
+| Ars-sur-Formans          | Corse                       | Ain  |
+| Ambérieu-en-Bugey        | Guyane                      | Ain  |
+| Armix                    | Provence-Alpes-Côte d'Azur  | Ain  |
+| L'Abergement-de-Varey    | Martinique                  | Ain  |
++--------------------------+-----------------------------+------+
+12 rows in set (0.08 sec)
+
+MariaDB [communes-france]> select c.name, r.name, d.name from cities c, regions r, departments d where r.id=c.id=d.id ; 
++--------------------------+-----------------------------+------+
+| name                     | name                        | name |
++--------------------------+-----------------------------+------+
+| L'Abergement-Clémenciat  | Guadeloupe                  | Ain  |
+
+| Ars-sur-Formans          | Corse                       | Ain  |
+| Artemare                 | Collectivités d'Outre-Mer   | Ain  |
++--------------------------+-----------------------------+------+
+19 rows in set (0.07 sec)
+
+MariaDB [communes-france]> select c.name, r.name, d.name from cities c, regions r, departments d where r.id=c.id=d.id and c.zipcode = 78 ; 
+ERROR 1054 (42S22): Unknown column 'c.zipcode' in 'where clause'
+MariaDB [communes-france]> select c.name, r.name, d.name from cities c, regions r, departments d where r.id=c.id=d.id and c.zip_code = 78 ; 
+Empty set (0.01 sec)
+
+MariaDB [communes-france]> select c.name, r.name, d.name from cities c, regions r, departments d where r.id=c.id=d.id and c.zip_code = 75 ; 
+Empty set (0.02 sec)
+
+MariaDB [communes-france]> select c.name, r.name, d.name from cities c, regions r, departments d where r.id=c.id= and c.zip_code = 75 ; 
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'and c.zip_code = 75' at line 1
+MariaDB [communes-france]> select c.name, r.name, d.name from cities c, regions r, departments d where r.id=c.id and c.zip_code = 75 ; 
+Empty set (0.00 sec)
+
+MariaDB [communes-france]> 
+MariaDB [communes-france]> select c.name, r.name, d.name from cities c, regions r, departments d where r.MariaDB [communes-france]> select c.name, r.name, d.name from cities c, regions r, departments d where c.departement_code = d.code and d.region_code = r.code and c.zip_code like '75%' ; 
+ERROR 1054 (42S22): Unknown column 'c.departement_code' in 'where clause'
+MariaDB [communes-france]> select c.name, r.name, d.name from cities c, regions r, departments d where c.department_code = d.code and d.region_code = r.code and c.zip_code like '78%' ; 
++-------------------------------+----------------+----------+
+| name                          | name           | name     |
++-------------------------------+----------------+----------+
+| Ablis                         | Île-de-France  | Yvelines |
+| Voisins-le-Bretonneux         | Île-de-France  | Yvelines |
++-------------------------------+----------------+----------+
+262 rows in set (0.03 sec)
+
+MariaDB [communes-france]> select c.name as ville, r.name as region, d.name as departement from cities c, regions r, departments d where c.department_code = d.code and d.region_code = r.code and c.zip_code like '78%' ; 
++-------------------------------+----------------+-------------+
+| ville                         | region         | departement |
++-------------------------------+----------------+-------------+
+| Ablis                         | Île-de-France  | Yvelines    |
+| Achères                       | Île-de-France  | Yvelines    |
+| Viroflay                      | Île-de-France  | Yvelines    |
+| Voisins-le-Bretonneux         | Île-de-France  | Yvelines    |
++-------------------------------+----------------+-------------+
+262 rows in set (0.02 sec)
+
+MariaDB [communes-france]> select c.name as ville, r.name as region, d.name as departement from cities c, regions r, departments d where c.department_code = d.code and d.region_code = r.code and c.zip_code like '75%' ; 
++-------+----------------+-------------+
+| ville | region         | departement |
++-------+----------------+-------------+
+| Paris | Île-de-France  | Paris       |
+| Paris | Île-de-France  | Paris       |
++-------+----------------+-------------+
+21 rows in set (0.02 sec)
+
+MariaDB [communes-france]> select distinct c.name as ville, r.name as region, d.name as departement from cities c, regions r, departments d where c.department_code = d.code and d.region_code = r.code and c.zip_code like '75%' ; 
++-------+----------------+-------------+
+| ville | region         | departement |
++-------+----------------+-------------+
+| Paris | Île-de-France  | Paris       |
++-------+----------------+-------------+
+1 row in set (0.02 sec)
+
+MariaDB [communes-france]> select distinct c.name as ville, r.name as region, d.name as departement from cities c, regions r, departments d where c.department_code = d.code and d.region_code = r.code and c.zip_code like '78%' ; 
++-------------------------------+----------------+-------------+
+| ville                         | region         | departement |
++-------------------------------+----------------+-------------+
+| Ablis                         | Île-de-France  | Yvelines    |
+| Voisins-le-Bretonneux         | Île-de-France  | Yvelines    |
++-------------------------------+----------------+-------------+
+262 rows in set (0.03 sec)
+
+MariaDB [communes-france]> select distinct c.name as ville, r.name as region, d.name as departement from cities c, regions r, departments d where c.department_code = d.code and d.region_code = r.code and c.zip_code like '750%' ; 
++-------+----------------+-------------+
+| ville | region         | departement |
++-------+----------------+-------------+
+| Paris | Île-de-France  | Paris       |
++-------+----------------+-------------+
+1 row in set (0.05 sec)
+
+MariaDB [communes-france]> select distinct c.name as ville, r.name as region, d.name as departement from cities c, regions r, departments d where c.department_code = d.code and d.region_code = r.code and c.zip_code like '45%' ; 
++-----------------------------+---------------------+-------------+
+| ville                       | region              | departement |
++-----------------------------+---------------------+-------------+
+| Adon                        | Centre-Val de Loire | Loiret      |
+| Aillant-sur-Milleron        | Centre-Val de Loire | Loiret      |
+| Vitry-aux-Loges             | Centre-Val de Loire | Loiret      |
+| Vrigny                      | Centre-Val de Loire | Loiret      |
+| Yèvre-la-Ville              | Centre-Val de Loire | Loiret      |
++-----------------------------+---------------------+-------------+
+326 rows in set (0.03 sec)
+
+MariaDB [communes-france]> 
